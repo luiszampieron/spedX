@@ -12,9 +12,9 @@ if (fs.existsSync(pdfCaminho)) {
 
   pdfParser.on("pdfParser_dataReady", function (pdfData) {
     const listEncode = [];
+    const listObj = [];
 
     pdfData.Pages.map((page, numPage) => {
-      listEncode.push("-----------------------------------------------");
       page.Texts.map((text, numText) => {
         let line = text.R[0].T;
 
@@ -22,21 +22,37 @@ if (fs.existsSync(pdfCaminho)) {
           line = "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-";
         }
 
+        if (
+          decodeURIComponent(line) == `Página ${numPage + 1} de` ||
+          decodeURIComponent(line) == "633" ||
+          decodeURIComponent(line) == "informado ou inválido" ||
+          decodeURIComponent(line) == "SPED - EFD-CONTRIBUIÇOES - VERSÃO 5.0.1"
+        ) {
+          return;
+        }
         if (numPage === 0) {
           if (numText > 28) {
-            listEncode.push(line);
+            listEncode.push(decodeURIComponent(line));
           }
         } else if (numText >= 20) {
-          listEncode.push(line);
+          listEncode.push(decodeURIComponent(line));
         }
       });
     });
 
-    const listDecode = listEncode.map((string) => {
-      return decodeURIComponent(string);
-    });
+    const teste = () => {
+      for (let i = 0; i < listEncode.length; i += 9) {
+        const obj = {};
+        obj.line = listEncode[i + 1];
+        obj.wrongValue = listEncode[i + 5];
+        obj.expectedValue = listEncode[i + 4];
+        listObj.push(obj);
+      }
+    };
 
-    console.log(listDecode);
+    teste();
+
+    console.log(listObj);
   });
 
   pdfParser.loadPDF(pdfCaminho);
