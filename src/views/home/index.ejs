@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="img/icon.ico" type="image/x-icon" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title>SPEDX</title>
+  </head>
+  <body>
+    <header>
+      <h1>SPEDX</h1>
+    </header>
+    <section>
+      <form action="/enviar" method="post">
+        <div class="col-form">
+          <label for="fileError" class="custom-file-upload"
+            >arquivo .pdf com os erros apontados pelo validador</label
+          >
+          <input type="file" name="fileError" id="fileError" accept=".pdf" />
+        </div>
+        <div class="col-form">
+          <label for="fileFiscal" class="custom-file-upload"
+            >arquivo .txt gerado "errado" pelo sistema</label
+          >
+          <input type="file" name="fileFiscal" id="fileFiscal" accept=".txt" />
+        </div>
+        <button class="btn btn-primary" type="submit" id="submit">
+          Enviar
+        </button>
+      </form>
+    </section>
+    <footer>
+      <span>DIGISAT TECNOLOGIA © 2021</span>
+      <span>FEITO POR LUIS ZAMPIERON</span>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
