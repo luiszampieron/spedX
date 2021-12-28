@@ -3,9 +3,7 @@ module.exports = (application) => {
     application.src.controllers.home.index(application, req, res);
   });
 
-  application.post("/enviar", (req, res) => {
-    console.log(req.body);
-
-    res.redirect("/");
+  application.post("/", (req, res) => {
+    application.src.controllers.home.upload(application, req, res);
   });
 };

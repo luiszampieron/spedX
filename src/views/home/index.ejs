@@ -21,8 +21,8 @@
     <header>
       <h1>SPEDX</h1>
     </header>
-    <section>
-      <form action="/enviar" method="post">
+    <main>
+      <form action="/" method="post" enctype="multipart/form-data">
         <div class="col-form">
           <label for="fileError" class="custom-file-upload"
             >arquivo .pdf com os erros apontados pelo validador</label
@@ -39,7 +39,11 @@
           Enviar
         </button>
       </form>
-    </section>
+
+      <% if(alerts) { %>
+      <p>Por favor, envie todos os dados necessários!</p>
+      <% } %>
+    </main>
     <footer>
       <span>DIGISAT TECNOLOGIA © 2021</span>
       <span>FEITO POR LUIS ZAMPIERON</span>

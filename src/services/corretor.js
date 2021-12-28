@@ -1,36 +1,22 @@
 const fs = require("fs");
 const PDFParser = require("pdf2json");
 
-module.exports = (pdfCaminho, spedCaminho) => {
-  const listEncode = [];
-  const listObj = [];
-
-  const pathSped = path.join(__dirname, spedCaminho);
-  const pathPDF = path.join(__dirname, pdfCaminho);
-
-  console.log("pathSped: ", pathSped);
-  console.log("pathPdf: ", pathPDF);
-
-  const spedString = fs.readFileSync(pathSped, "utf8");
-  const listText = spedString.split("\r\n");
-
-  let _window = window;
-  window = undefined;
-  if (fs.existsSync(pathPDF)) {
+module.exports.corretor = (pdfCaminho, spedCaminho) =>
+  new Promise((resolve) => {
     const pdfParser = new PDFParser();
+    const listEncode = [];
+    const listObj = [];
 
-    pdfParser.on("pdfParser_dataError", function (errData) {
-      console.error(errData.parserError);
-    });
+    const spedString = fs.readFileSync(spedCaminho, "utf8");
+    const listText = spedString.split("\r\n");
 
     pdfParser.on("pdfParser_dataReady", function (pdfData) {
       pdfData.Pages.map((page, numPage) => {
         page.Texts.map((text, numText) => {
           let line = decodeURIComponent(text.R[0].T);
 
-          if (line == "Mensagem") {
+          if (line == "Mensagem")
             line = "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-";
-          }
 
           if (
             line == `Página ${numPage + 1} de` ||
@@ -40,13 +26,10 @@ module.exports = (pdfCaminho, spedCaminho) => {
             line == "VL_COFINS" ||
             line == "Contribuição Social." ||
             line == "SPED - EFD-CONTRIBUIÇOES - VERSÃO 5.0.1"
-          ) {
+          )
             return;
-          }
 
-          if (line.slice(0, 1) === "|" || line.slice(-1) === "|") {
-            return;
-          }
+          if (line.slice(0, 1) === "|" || line.slice(-1) === "|") return;
 
           if (numPage === 0) {
             if (numText > 28) {
@@ -58,7 +41,7 @@ module.exports = (pdfCaminho, spedCaminho) => {
         });
       });
 
-      const teste = () => {
+      const objFactory = () => {
         for (let i = 0; i < listEncode.length; i += 7) {
           const obj = {};
           obj.line = listEncode[i + 1] - 1;
@@ -74,7 +57,7 @@ module.exports = (pdfCaminho, spedCaminho) => {
         }
       };
 
-      teste();
+      objFactory();
 
       listObj.forEach((item) => {
         listText[item.line] = listText[item.line].replace(
@@ -83,26 +66,15 @@ module.exports = (pdfCaminho, spedCaminho) => {
         );
       });
 
-      fs.writeFile("arrumado.txt", listText.join("\r\n"), function (err) {
-        if (err) return console.log(err);
+      fs.unlink(pdfCaminho, (err) => {
+        if (err) throw err;
+      });
+      fs.unlink(spedCaminho, (err) => {
+        if (err) throw err;
       });
 
-      const test3 = [];
-      const teste2 = listObj.forEach((item) =>
-        test3.push(
-          item.line + "------" + item.wrongValue + "------" + item.expectedValue
-        )
-      );
-
-      fs.writeFile("teste.txt", test3.join("\r\n"), function (err) {
-        if (err) return console.log(err);
-      });
+      resolve(listText.join("\r\n"));
     });
 
-    pdfParser.loadPDF(pathPDF);
-    console.log("Arquivo localizado");
-  } else {
-    console.log("Arquivo não localizado");
-  }
-  window = _window;
-};
+    pdfParser.loadPDF(pdfCaminho);
+  });

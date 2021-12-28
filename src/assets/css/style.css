@@ -48,14 +48,15 @@ header h1 {
   align-items: center;
 }
 
-section {
+main {
   height: 75vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-section form {
+main form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,6 +83,10 @@ section form {
 
 input[type="file"] {
   display: none;
+}
+
+.download {
+  margin-top: 10px;
 }
 
 footer {
