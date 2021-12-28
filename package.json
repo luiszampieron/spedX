@@ -1,10 +1,9 @@
 {
-  "name": "speedcon",
-  "version": "1.0.0",
-  "description": "",
+  "name": "speedx",
+  "version": "2.0.0",
+  "description": "Modificador de um arquivo .txt baseado nas informações geradas pelo validador do mesmo. Corretor automatizado",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./app.js"
   },
   "author": "Luis Zampieron",

@@ -1,12 +1,12 @@
 const fs = require("fs");
 
 module.exports.index = function (application, req, res) {
-  res.render("home/index", { alerts: false });
+  res.render("home/index");
 };
 
 module.exports.upload = function (application, req, res) {
   if (req.files === null) {
-    res.render("home/index", { alerts: true });
+    res.render("home/index");
   } else {
     const mainAsync = async () => {
       const value = await application.src.services.corretor.corretor(
